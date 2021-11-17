@@ -6,25 +6,40 @@ const int m1b = 6;
 const int m2a = 10;
 const int m2b = 9;
 
-const int servo = 11;
 int servoPosition = 0;
 
 const int trig = 4;
 const int echo = 3;
 
-float distance = 0;
+float leftDistance;
+float frontDistance;
+float rightDistance;
 
 void setup() {
     serial.begin(9600);
 
     pinSetup();
 
-    Servo Servo;
-    Servo.attach(servo);
+    Servo servo;
+    servo.attach(11);
+
 }
 
 void loop() {
     getDistances();
+
+    if (right_dis <= 6&& left_dis <= 6&& front_dis>5){
+        forward();
+    }
+    else if(right_dis > 6&&left_dis <= 6&& front_dis<=5){
+        turnRight();
+    }
+    else if (left_dis >6&&right_dis <= 6&& front_dis<=5){
+        turnLeft();
+    }
+    else if (left_dis <=6&&right_dis <= 6&& front_dis <=6){
+        reverse();
+    }
 }
 
 void pinSetup() {
@@ -39,8 +54,21 @@ void pinSetup() {
     pinMode(echo, INPUT);
 }
 
-void servoUpdate() {
-    servo.write(servoPosition);
+void getDistances() {
+    // Rotate servo to left position and record distance
+    servo.write(20);
+    leftDistance = distance();
+
+    // Rotate servo to center position and record distance
+    servo.write(70);
+    frontDistance = distance();
+
+    // Rotate servo to right position and record distance
+    servo.write(160);
+    rightDistance = distance();
+
+    // Return servo to center position
+    servo.write(70);
 }
 
 float distance() {
