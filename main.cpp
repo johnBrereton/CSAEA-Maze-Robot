@@ -24,7 +24,7 @@ void setup() {
 }
 
 void loop() {
-    servoUpdate();
+    getDistances();
 }
 
 void pinSetup() {
@@ -41,4 +41,35 @@ void pinSetup() {
 
 void servoUpdate() {
     servo.write(servoPosition);
+}
+
+float distance() {
+    float echoTime; // Stores the echo time of a ping
+    float calculatedDistance; // Stores the distance calculated from the echo time
+    
+    // Send 10ms ultrasonic pulse
+    digitalWrite(trig, HIGH);
+    delayMicroseconds(10);
+    digitalWrite(trig, LOW);
+
+    echoTime = pulseIn(echo, HIGH);
+
+    calculatedDistance = echoTime/148.0;
+    
+    return calculatedDistance;
+}
+
+void forward() {
+    digitalWrite(m1a, HIGH);
+    digitalWrite(m1b, LOW);
+    digitalWrite(m2a, HIGH);
+    digitalWrite(m2b, LOW);
+}
+
+void reverse() {
+
+}
+
+void telemetry() {
+
 }
