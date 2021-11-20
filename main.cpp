@@ -54,22 +54,22 @@ void pinSetup() {
 
 void getDistances() {
     // Rotate servo to left position and record distance
-    servo.write(20);
+    servo.write(10);
     delay(1000);
     leftDistance = distance();
 
     // Rotate servo to center position and record distance
-    servo.write(70);
+    servo.write(90);
     delay(1000);
     frontDistance = distance();
 
     // Rotate servo to right position and record distance
-    servo.write(160);
+    servo.write(170);
     delay(1000);
     rightDistance = distance();
 
     // Return servo to center position
-    servo.write(70);
+    servo.write(90);
     delay(1000);
 }
 
