@@ -1,7 +1,5 @@
 #include <Servo.h>
 
-bool enabled = false;
-
 const int m1a = 5;
 const int m1b = 6;
 
