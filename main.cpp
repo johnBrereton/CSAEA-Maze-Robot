@@ -32,23 +32,9 @@ void setup() {
 }
 
 void loop() {
-    if (enabled && digitalRead(2) == HIGH) {
-        digitalWrite(greenLED, LOW);
-        enabled = false;
-        stop();
-    }
-    else if (!enabled && digitalRead(2) == HIGH) {
-        digitalWrite(greenLED, HIGH);
-        enabled = true;
-    }
-
-    if (enabled) {
-        getDistances();
+    getDistances();
         
-        driveUpdate();
-    }
-    
-    telemetry();
+    driveUpdate();
 }
 
 void pinSetup() {
@@ -69,18 +55,22 @@ void pinSetup() {
 void getDistances() {
     // Rotate servo to left position and record distance
     servo.write(20);
+    delay(1000);
     leftDistance = distance();
 
     // Rotate servo to center position and record distance
     servo.write(70);
+    delay(1000);
     frontDistance = distance();
 
     // Rotate servo to right position and record distance
     servo.write(160);
+    delay(1000);
     rightDistance = distance();
 
     // Return servo to center position
     servo.write(70);
+    delay(1000);
 }
 
 void driveUpdate() {
@@ -123,10 +113,14 @@ float distance() {
 
 // Move robot forward indefinetly
 void forward() {
-    digitalWrite(m1a, HIGH);
-    digitalWrite(m1b, LOW);
-    digitalWrite(m2a, HIGH);
-    digitalWrite(m2b, LOW);
+    while(distance() > 8) {
+        digitalWrite(m1a, HIGH);
+        digitalWrite(m1b, LOW);
+        digitalWrite(m2a, HIGH);
+        digitalWrite(m2b, LOW);
+    }
+    digitalWrite(m1a, LOW);
+    digitalWrite(m2a, LOW);
 }
 
 // Turn robot left 90 degrees
@@ -173,17 +167,5 @@ void blink(int led, int totalTime, int pulses) {
         digitalWrite(led, LOW);
         
         delay(totalTime/(pulses*2));
-    }
-}
-
-void telemetry() {
-    Serial.print("=======================");
-
-    // Display robot status
-    if (enabled) {
-        Serial.print("Robot is enabled");
-    }
-    else {
-        Serial.print("Robot is disabled");
     }
 }
