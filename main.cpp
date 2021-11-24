@@ -9,7 +9,6 @@ const int m2b = 9;
 const int turnTime = 2000; // Time in ms required for robot to turn 90 degrees
 
 const int redLED = 11;
-const int greenLED = 12;
 const int leftLED = 7;
 const int rightLED = 8;
 
