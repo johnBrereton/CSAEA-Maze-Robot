@@ -1,23 +1,27 @@
 #include <Servo.h>
 
+// Declare motor pins
 const int m1a = 5;
 const int m1b = 6;
-
 const int m2a = 10;
 const int m2b = 9;
 
 const int turnTime = 2000; // Time in ms required for robot to turn 90 degrees
 
+// Declare LED pins
 const int redLED = 11;
 const int leftLED = 7;
 const int rightLED = 8;
 
+// Initialize servo
 Servo servo;
 int servoPosition = 0;
 
+// Declare ultrasonic sensor pins
 const int trig = 4;
 const int echo = 3;
 
+// Declare measured distances
 float leftDistance;
 float frontDistance;
 float rightDistance;
@@ -34,6 +38,7 @@ void loop() {
     driveUpdate();
 }
 
+// Set pin modes for all pins and set servo pin
 void pinSetup() {
     // Set motor controller pin modes
     pinMode(m1a, OUTPUT);
@@ -49,6 +54,7 @@ void pinSetup() {
     pinMode(echo, INPUT);
 }
 
+// Rotate servo to all 3 positions and record distance at each position
 void getDistances() {
     // Rotate servo to left position and record distance
     servo.write(10);
@@ -70,6 +76,7 @@ void getDistances() {
     delay(1000);
 }
 
+// Decide which direction to move according to previously stored distances
 void driveUpdate() {
     // If the front and left sides are blocked turn right
     if(rightDistance > 8 && leftDistance <= 8 && frontDistance <= 8){
@@ -92,6 +99,7 @@ void driveUpdate() {
     }
 }
 
+// Get and return distance recorded by ultrasonic sensor
 float distance() {
     float echoTime; // Stores the echo time of a ping
     float calculatedDistance; // Stores the distance calculated from the echo time
