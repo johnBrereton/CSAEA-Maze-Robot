@@ -7,7 +7,7 @@ const int motor1b = 9;
 const int motor2a = 6;
 const int motor2b = 5;
 
-const int turnTime = 625;
+const int turnTime = 650;
 
 Servo servo;
 int servoPosition = 0;
@@ -15,32 +15,32 @@ int servoPosition = 0;
 const int trig = 4;
 const int echo = 3;
 
-float leftDistance;
+float leftDistance = 0.0;
 float frontDistance;
 float rightDistance;
 
-//Setup
 void setup() {
   Serial.begin(9600);
   
   pinSetup();
 }
 
-//Loop
 void loop() {
   getForwardDistance();
-  driveUpdate();
+  forward();
+
+  if (frontDistance < 5) {
+    stopMotors();
+    scan();
+    
+    // If the front and left sides are blocked turn right
+    if (leftDistance > 10) turnRight();
+    else if (rightDistance > 10) turnLeft();
+    //else backUpAndScan();
+  }
 }
 
-void getForwardDistance() {
-  frontDistance = distance();
-  Serial.println(frontDistance);
-}
-
-void straightWall(){
-  servo.write(90);
-  frontDistance = distance();
-}
+// *** F U N C T I O N S ***
 
 void scan() {
   // Rotate servo to left position and record distance
@@ -54,40 +54,23 @@ void scan() {
   delay(500);
   rightDistance = distance();
   Serial.println(rightDistance);
-
-  // Return servo to center position
-  servo.write(90);
-  delay(750);
-
 }
 
-void driveUpdate() {
-  if (frontDistance > 5) {
-    forward();
-  }
-
-  else {
-    stopMotors();
-    scan();
-    
-    // If the front and left sides are blocked turn right
-    if (rightDistance > 10) {
-      turnLeft();
-    }
-
-    // If the right and front sides are blocked turn left
-    else if (leftDistance > 10) {
-      turnRight();
-    }
-  
-    else {
-      backUpAndScan();
-    }
-  }
-  
+void getForwardDistance() {
+  servo.write(90);
+  delay(500);
+  frontDistance = distance();
+  Serial.println(frontDistance);
 }
 
 void backUpAndScan() {
+  servo.write(10);
+  delay(500);
+  leftDistance = distance();
+  while(leftDistance < 10)
+ { 
+  backwards();
+ }
   
 }
 
@@ -107,9 +90,6 @@ float distance() {
   return calculatedDistance;
 }
 
-
-
-// Move robot forward
 void forward() {
   digitalWrite(motor1a, HIGH);
   digitalWrite(motor1b, LOW);
