@@ -7,7 +7,7 @@ const int motor1b = 9;
 const int motor2a = 6;
 const int motor2b = 5;
 
-const int turnTime = 650;
+const int turnTime = 700;
 
 Servo servo;
 int servoPosition = 0;
@@ -35,8 +35,10 @@ void loop() {
     
     // If the front and left sides are blocked turn right
     if (leftDistance > 10) turnRight();
+    
     else if (rightDistance > 10) turnLeft();
-    //else backUpAndScan();
+    
+    else backUpAndScan();
   }
 }
 
@@ -54,11 +56,12 @@ void scan() {
   delay(500);
   rightDistance = distance();
   Serial.println(rightDistance);
+
+  servo.write(90);
 }
 
 void getForwardDistance() {
   servo.write(90);
-  delay(500);
   frontDistance = distance();
   Serial.println(frontDistance);
 }
@@ -67,7 +70,7 @@ void backUpAndScan() {
   servo.write(10);
   delay(500);
   leftDistance = distance();
-  while(leftDistance < 10)
+  while(leftDistance < 3)
  { 
   backwards();
  }
