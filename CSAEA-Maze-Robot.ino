@@ -7,7 +7,7 @@ const int motor1b = 9;
 const int motor2a = 6;
 const int motor2b = 5;
 
-const int turnTime = 700;
+const int turnTime = 695;
 
 Servo servo;
 int servoPosition = 0;
@@ -46,7 +46,7 @@ void loop() {
 // *** F U N C T I O N S ***
 
 void scan() {
-  // Rotate servo to left position and record distance
+n  // Rotate servo to left position and record distance
   servo.write(10);
   delay(500);
   leftDistance = distance();
@@ -57,28 +57,31 @@ void scan() {
   delay(500);
   rightDistance = distance();
   Serial.println(rightDistance);
-
-  // Return servo to center position
-  servo.write(90);
 }
 
 // Read the distance in front of the robot
 void getForwardDistance() {
   servo.write(90);
+  delay(500);
   frontDistance = distance();
   Serial.println(frontDistance);
 }
 
 // Backup until opening is seen on left
 void backUpAndScan() {
-  servo.write(10);
+  servo.write(170);
   delay(500);
   leftDistance = distance();
-  while(leftDistance < 3)
- { 
-  backwards();
- }
   
+  while(leftDistance < 5){ 
+    backwards();
+    leftDistance = distance();
+  }
+
+  servo.write(90);
+  turnLeft();
+  delay(500);
+
 }
 
 // Returns the distance from the ultra sonic sensor
