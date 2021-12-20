@@ -29,6 +29,7 @@ void loop() {
   getForwardDistance();
   forward();
 
+  // Drive forward until abstructed and turn or reverse according to scan results
   if (frontDistance < 5) {
     stopMotors();
     scan();
@@ -57,15 +58,18 @@ void scan() {
   rightDistance = distance();
   Serial.println(rightDistance);
 
+  // Return servo to center position
   servo.write(90);
 }
 
+// Read the distance in front of the robot
 void getForwardDistance() {
   servo.write(90);
   frontDistance = distance();
   Serial.println(frontDistance);
 }
 
+// Backup until opening is seen on left
 void backUpAndScan() {
   servo.write(10);
   delay(500);
@@ -77,6 +81,7 @@ void backUpAndScan() {
   
 }
 
+// Returns the distance from the ultra sonic sensor
 float distance() {
   float echoTime; // Stores the echo time of a ping
   float calculatedDistance; // Stores the distance calculated from the echo time
